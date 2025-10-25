@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For Rajjo — I'm Sorry 💌</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg1: #ffefef;
+      --bg2: #f8f0ff;
+      --accent: #ff6b8f;
+      --muted: #6b6b7a;
+      --glass: rgba(255,255,255,0.6);
+      --glass2: rgba(255,255,255,0.12);
+      --paper: #fff7f3;
+      --card-shadow: 0 20px 50px rgba(15,10,20,0.08);
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+      background: radial-gradient(1200px 600px at 10% 10%, rgba(255,107,129,0.06), transparent 8%),
+                  radial-gradient(1000px 600px at 90% 90%, rgba(120,86,255,0.04), transparent 6%),
+                  linear-gradient(180deg,var(--bg1),var(--bg2));
+      display:flex;align-items:center;justify-content:center;padding:32px;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* Container */
+    .wrap{
+      width:1100px;max-width:98%;min-height:600px;border-radius:22px;background:linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.45));
+      box-shadow:var(--card-shadow);backdrop-filter: blur(8px) saturate(120%);overflow:hidden;display:grid;
+      grid-template-columns: 460px 1fr; gap:28px; padding:28px;
+    }
+
+    /* Left column */
+    .left{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:18px;
+    }
+
+    .title{
+      font-family:'Dancing Script',cursive;font-size:36px;color:var(--accent);text-shadow:0 6px 18px rgba(255,107,129,0.12);
+      display:flex;align-items:center;gap:10px;
+    }
+    .subtitle{color:var(--muted);font-size:14px;margin-top:6px;text-align:center;max-width:380px}
+
+    /* Envelope */
+    .envWrap{width:380px;height:260px;display:flex;align-items:center;justify-content:center;position:relative;perspective:1000px}
+    .envelope{
+      width:340px;height:220px;border-radius:14px;background:linear-gradient(180deg,#fff8f8,#fff);position:relative;
+      box-shadow:0 10px 30px rgba(20,10,20,0.08);overflow:hidden;transition:transform .45s cubic-bezier(.2,.9,.25,1);
+      transform-origin:center;
+    }
+    .envelope:hover{transform:translateY(-6px) rotateX(1deg)}
+    .flap{
+      position:absolute;left:0;right:0;top:0;height:54%;
+      background:linear-gradient(180deg,#ffecec,#fff1f1);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform .75s cubic-bezier(.2,.9,.25,1);
+      z-index:3;box-shadow:inset 0 -2px 0 rgba(0,0,0,0.04);
+    }
+    .envelope.open .flap{transform:rotateX(-180deg) translateY(-68%)}
+    .paper{
+      position:absolute;left:16px;right:16px;top:30%;bottom:16px;background:linear-gradient(180deg,var(--paper),#fff);border-radius:10px;padding:18px;
+      transform: translateY(8px) scale(.995);opacity:0;transition:all .6s cubic-bezier(.2,.9,.25,1);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,0.6);
+      font-family:'Dancing Script',cursive;color:#2b2b2b;font-size:18px;line-height:1.6;white-space:pre-wrap;
+    }
+    .envelope.open .paper{transform:translateY(0) scale(1);opacity:1}
+
+    /* Glow ring behind envelope */
+    .envGlow{position:absolute;width:420px;height:420px;border-radius:50%;left:-20px;top:-60px;background: radial-gradient(circle at 30% 30%, rgba(255,107,129,0.08), transparent 20%);filter: blur(24px);z-index:0;pointer-events:none}
+
+    /* Right column */
+    .right{display:flex;flex-direction:column;gap:16px;padding:18px;align-items:flex-start}
+    .cardTitle{font-size:22px;color:#222;font-weight:700}
+    .explain{color:var(--muted);font-size:14px}
+
+    .noteDisplay{
+      margin-top:8px;width:100%;min-height:260px;border-radius:14px;padding:28px;background:linear-gradient(180deg,#fffefb,#fff8f4);
+      box-shadow:0 10px 30px rgba(25,12,20,0.04);font-family:'Dancing Script',cursive;font-size:20px;color:#281e25;line-height:1.7;white-space:pre-wrap;position:relative;
+    }
+
+    /* Controls */
+    .controls{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+    .btn{
+      background:linear-gradient(180deg,var(--accent),#ff4570);color:white;border:none;padding:12px 16px;border-radius:12px;font-weight:700;cursor:pointer;
+      box-shadow:0 12px 30px rgba(255,80,120,0.16);transition:transform .18s, box-shadow .18s;
+    }
+    .btn:hover{transform:translateY(-4px);box-shadow:0 18px 38px rgba(255,80,120,0.18)}
+    .btn.alt{background:transparent;color:var(--accent);border:2px solid rgba(255,107,129,0.12);box-shadow:none}
+    .small{color:var(--muted);font-size:13px;margin-top:6px}
+
+    /* Music control */
+    .musicCtl{position:absolute;right:18px;top:18px;display:flex;gap:8px;align-items:center}
+    .musicBtn{width:48px;height:48px;border-radius:12px;border:none;background:linear-gradient(180deg,#fff,#fff);box-shadow:0 6px 18px rgba(20,10,30,0.08);cursor:pointer;font-size:18px}
+    .musicBtn.playing{box-shadow:0 10px 30px rgba(255,100,140,0.18);transform:scale(1.04)}
+
+    /* Floating hearts background */
+    .bgHearts{position:absolute;inset:0;pointer-events:none;z-index:0}
+    .bgHearts .h{
+      position:absolute;font-size:26px;opacity:.08;mix-blend-mode:screen;transform:rotate(-20deg)
+    }
+
+    /* Typewriter reveal */
+    .typewriter {
+      overflow: hidden;
+      border-right: 4px solid rgba(40,40,40,0.06);
+      white-space: pre-wrap;
+      display:inline-block;
+      animation: typing 2.6s steps(40,end) 0.25s 1 normal both, blink .9s step-end infinite;
+    }
+    @keyframes typing { from { width: 0 } to { width: 100% } }
+    @keyframes blink { 50% { border-color: transparent } }
+
+    /* Responsive */
+    @media (max-width:1000px){
+      .wrap{grid-template-columns: 1fr; padding:18px}
+      .left{order:2}
+      .right{order:1}
+    }
+
+    /* Download toast */
+    .toast{
+      position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:rgba(0,0,0,0.75);color:white;padding:12px 18px;border-radius:12px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .4s;
+    }
+    .toast.show{opacity:1;pointer-events:auto}
+  </style>
+</head>
+<body>
+  <div class="bgHearts" aria-hidden="true">
+    <div class="h" style="left:6%;top:12%;font-size:40px;">❤️</div>
+    <div class="h" style="left:84%;top:8%;font-size:28px;">💕</div>
+    <div class="h" style="left:46%;top:66%;font-size:36px;">❤️</div>
+    <div class="h" style="left:18%;top:44%;font-size:24px;">💗</div>
+  </div>
+
+  <div class="wrap" role="main" aria-label="Apology letter for Rajjo">
+    <div class="left">
+      <div class="envGlow" aria-hidden="true"></div>
+
+      <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+        <div class="title">For Rajjo</div>
+        <div class="subtitle">A small, sincere note — open the letter and press play for a soft tune.</div>
+      </div>
+
+      <div class="envWrap" aria-hidden="false">
+        <div id="env" class="envelope" role="button" aria-label="Open letter">
+          <div class="flap"></div>
+          <div id="paper" class="paper" aria-live="polite">
+Dear Rajjo,
+
+I'm really sorry I made a dumb joke about your pens today. I didn't mean to hurt you — I actually love how much care you put into small things. You make ordinary moments feel special.
+
+Please forgive my stupid joke. Can we start fresh? I promise to be kinder and to appreciate every little thing about you.
+
+Love,
+— Aryan 💞
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;gap:12px;margin-top:6px;">
+        <button id="openBtn" class="btn">Open letter & play</button>
+        <button id="restartBtn" class="btn alt">Send again</button>
+      </div>
+
+      <div class="small">Tip: Click "Send again" to replay the unfold + music. Use the Download button on the right to save a pretty note.</div>
+    </div>
+
+    <div class="right">
+      <div style="width:100%;display:flex;align-items:center;justify-content:space-between;">
+        <div>
+          <div class="cardTitle">Your Handwritten Note</div>
+          <div class="explain">Personal, warm, and designed to feel like real paper.</div>
+        </div>
+
+        <div class="musicCtl" aria-hidden="false">
+          <button id="musicBtn" class="musicBtn" title="Play / Pause (requires envelope opened)">🔇</button>
+        </div>
+      </div>
+
+      <div id="note" class="noteDisplay" aria-label="Displayed note">
+        <!-- the note will be typed out on open; default shown for no-JS as fallback -->
+Dear Rajjo,
+
+I'm really sorry I made a dumb joke about your pens today. I didn't mean to hurt you — I actually love how much care you put into small things. You make ordinary moments feel special.
+
+Please forgive my stupid joke. Can we start fresh? I promise to be kinder and to appreciate every little thing about you.
+
+Love,
+— Aryan 💞
+      </div>
+
+      <div class="controls">
+        <button id="downloadBtn" class="btn alt">Download as Image</button>
+        <button id="copyBtn" class="btn alt">Copy text</button>
+        <button id="editBtn" class="btn alt">Edit note</button>
+      </div>
+
+      <div class="small">When you click Download, the note is rendered into a high-quality PNG (handwritten script) and downloaded.</div>
+    </div>
+  </div>
+
+  <!-- Hidden canvas for PNG generation -->
+  <canvas id="canvas" width="1400" height="1000" style="display:none"></canvas>
+
+  <!-- Placeholder audio element: replace src with your mp3 file path -->
+  <!-- REPLACE WITH YOUR MP3: put your file in same folder and change src to 'audio/your-song.mp3' or similar -->
+  <audio id="bgAudio" src="audio/your-music.mp3" preload="auto"></audio>
+
+  <div id="toast" class="toast">Downloaded ✓</div>
+
+  <script>
+    // UI references
+    const env = document.getElementById('env');
+    const paper = document.getElementById('paper');
+    const note = document.getElementById('note');
+    const openBtn = document.getElementById('openBtn');
+    const restartBtn = document.getElementById('restartBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const editBtn = document.getElementById('editBtn');
+    const musicBtn = document.getElementById('musicBtn');
+    const bgAudio = document.getElementById('bgAudio');
+    const canvas = document.getElementById('canvas');
+    const toast = document.getElementById('toast');
+
+    let opened = false;
+    let typed = false;
+    let typingTimeouts = [];
+    let musicAllowed = false;
+
+    // envelope open animation + typewriter reveal
+    function openLetter(playMusic=true){
+      if (opened) return;
+      opened = true;
+      env.classList.add('open');
+      // typewriter reveal: animate into #note from paper text
+      const text = paper.innerText.trim();
+      note.innerHTML = ''; // clear
+      typeWriter(text, note, 18, () => {
+        typed = true;
+      });
+      // auto-play audio (only if user interacts, browser policy)
+      if(playMusic) {
+        // attempt to play the html audio element, only works if user interacted (openBtn or env click)
+        tryPlayAudio();
+      }
+      // small hearts burst
+      spawnHearts(10, 700);
+    }
+
+    // typewriter function (stronger control)
+    function typeWriter(txt, targetEl, charDelay = 18, onDone) {
+      // clear any previous timeouts
+      typingTimeouts.forEach(t=>clearTimeout(t));
+      typingTimeouts = [];
+      targetEl.innerHTML = ''; // ensure empty
+      let i = 0;
+      const lines = txt.split('\n');
+      // We'll render line by line preserving line breaks
+      function renderLine(lineIdx) {
+        if (lineIdx >= lines.length) { if (onDone) onDone(); return; }
+        const line = lines[lineIdx];
+        const span = document.createElement('div');
+        span.style.display = 'block';
+        targetEl.appendChild(span);
+        function step() {
+          if (i <= line.length) {
+            span.textContent = line.slice(0, i);
+            i++;
+            typingTimeouts.push(setTimeout(step, charDelay + Math.random()*6));
+          } else {
+            // finish line, move to next
+            i = 0;
+            typingTimeouts.push(setTimeout(()=>renderLine(lineIdx+1), 180));
+          }
+        }
+        step();
+      }
+      renderLine(0);
+    }
+
+    // clicking envelope or button
+    env.addEventListener('click', () => openLetter(true));
+    openBtn.addEventListener('click', () => openLetter(true));
+    restartBtn.addEventListener('click', () => {
+      // reset typed and re-open (replay)
+      typed = false;
+      typingTimeouts.forEach(t=>clearTimeout(t));
+      typingTimeouts = [];
+      opened = false;
+      env.classList.remove('open');
+      note.innerHTML = ''; // clear
+      setTimeout(()=>openLetter(true), 250);
+    });
+
+    // Edit note (prompt)
+    editBtn.addEventListener('click', () => {
+      const current = paper.innerText.trim();
+      const edited = prompt("Edit the note for Rajjo:", current);
+      if (edited !== null) {
+        paper.innerText = edited;
+        note.innerText = edited;
+      }
+    });
+
+    // Copy note
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(paper.innerText.trim());
+        showToast('Copied to clipboard ✓');
+      } catch(e) {
+        showToast('Copy failed — select and copy manually');
+      }
+    });
+
+    // Download generate PNG
+    downloadBtn.addEventListener('click', async () => {
+      // Render high-resolution PNG based on paper text
+      const W = 1400, H = 1000;
+      canvas.width = W; canvas.height = H;
+      const ctx = canvas.getContext('2d');
+
+      // background
+      const grad = ctx.createLinearGradient(0,0,0,H);
+      grad.addColorStop(0, '#fffbf9'); grad.addColorStop(1, '#fff7f2');
+      ctx.fillStyle = grad; ctx.fillRect(0,0,W,H);
+
+      // paper rect
+      const pad = 120;
+      ctx.fillStyle = '#fffefb';
+      roundRect(ctx, pad, pad, W - pad*2, H - pad*2, 22); ctx.fill();
+
+      // subtle paper texture: tiny dots
+      for (let i=0;i<9000;i++){
+        ctx.fillStyle = 'rgba(0,0,0,' + (Math.random()*0.02) + ')';
+        ctx.fillRect(Math.random()*W, Math.random()*H, 1, 1);
+      }
+
+      // Header title
+      ctx.fillStyle = '#3a2630';
+      ctx.font = '700 36px "Dancing Script", cursive';
+      ctx.fillText('A Note for Rajjo', pad + 6, pad - 24);
+
+      // Draw the handwriting text
+      const txt = paper.innerText.trim();
+      ctx.fillStyle = '#2b2327';
+      ctx.font = '28px "Dancing Script", cursive';
+      const lines = txt.split('\n');
+      let y = pad + 30;
+      const maxW = W - pad*2 - 12;
+      for (let l of lines) {
+        // naive wrap
+        let words = l.split(' ');
+        let cur = '';
+        for (let w of words) {
+          const test = cur ? (cur + ' ' + w) : w;
+          if (ctx.measureText(test).width < maxW) {
+            cur = test;
+          } else {
+            ctx.fillText(cur, pad + 12, y); y += 42; cur = w;
+          }
+        }
+        if (cur) { ctx.fillText(cur, pad + 12, y); y += 42; }
+      }
+
+      // signature
+      ctx.font = '36px "Dancing Script", cursive';
+      ctx.fillStyle = '#b23a51';
+      ctx.fillText('— Aryan 💞', pad + 12, y + 18);
+
+      // small heart mark
+      ctx.fillStyle = '#ff4f7a';
+      ctx.beginPath(); ctx.moveTo(W - pad - 30, H - pad - 50);
+      ctx.arc(W - pad - 36, H - pad - 44, 8, 0, Math.PI*2);
+      ctx.arc(W - pad - 16, H - pad - 44, 8, 0, Math.PI*2);
+      ctx.fill();
+
+      // download
+      const data = canvas.toDataURL('image/png');
+      const a = document.createElement('a'); a.href = data; a.download = 'for_rajjo_note.png'; a.click();
+      showToast('Downloaded ✓');
+      // small heart burst
+      spawnHearts(9, 200);
+    });
+
+    // helper: rounded rect path
+    function roundRect(ctx,x,y,w,h,r){
+      if (w < 2 * r) r = w / 2;
+      if (h < 2 * r) r = h / 2;
+      ctx.beginPath();
+      ctx.moveTo(x+r, y);
+      ctx.arcTo(x+w, y, x+w, y+h, r);
+      ctx.arcTo(x+w, y+h, x, y+h, r);
+      ctx.arcTo(x, y+h, x, y, r);
+      ctx.arcTo(x, y, x+w, y, r);
+      ctx.closePath();
+    }
+
+    // spawn floating hearts on screen
+    function spawnHearts(count = 6, spread = 0) {
+      for (let i=0;i<count;i++){
+        setTimeout(()=> {
+          const el = document.createElement('div');
+          el.className = 'hfloat';
+          el.textContent = '💖';
+          el.style.position = 'fixed';
+          el.style.left = (30 + Math.random()*60) + '%';
+          el.style.bottom = '-40px';
+          el.style.fontSize = (16 + Math.random()*26) + 'px';
+          el.style.opacity = '0.95';
+          el.style.zIndex = 9999;
+          document.body.appendChild(el);
+          const dur = 3000 + Math.random()*1800;
+          el.animate([
+            { transform: `translateY(0) scale(0.9) rotate(0deg)`, opacity: 1 },
+            { transform: `translateY(-${200 + Math.random()*360}px) scale(1.1) rotate(${Math.random()*360}deg)`, opacity: 0 }
+          ], { duration: dur, easing: 'cubic-bezier(.2,.9,.25,1)'});
+          setTimeout(()=> el.remove(), dur + 60);
+        }, i * 90 + spread);
+      }
+    }
+
+    // Copy fallback
+    copyBtn.addEventListener('click', async ()=> {
+      try{ await navigator.clipboard.writeText(paper.innerText.trim()); showToast('Copied ✓'); }
+      catch(e){ showToast('Copy failed'); }
+    });
+
+    // Music control: uses <audio> element (you will replace src)
+    musicBtn.addEventListener('click', async () => {
+      if (!opened) {
+        openLetter(true);
+        return;
+      }
+      if (!bgAudio.src || bgAudio.src.endsWith('your-music.mp3')) {
+        // user likely hasn't provided music - fallback to small synth
+        playSynthSnippet();
+        return;
+      }
+      try {
+        if (bgAudio.paused) {
+          await bgAudio.play();
+          musicBtn.classList.add('playing');
+          musicBtn.textContent = '🔊';
+        } else {
+          bgAudio.pause();
+          musicBtn.classList.remove('playing');
+          musicBtn.textContent = '🔇';
+        }
+      } catch(e) {
+        // autoplay blocked, try to resume audio context by user gesture
+        console.warn('audio play failed', e);
+      }
+    });
+
+    // If audio ends, toggle button
+    bgAudio.addEventListener('ended', () => {
+      musicBtn.classList.remove('playing'); musicBtn.textContent = '🔇';
+    });
+
+    // If user clicks openBtn, try to play audio
+    async function tryPlayAudio() {
+      if (!bgAudio.src || bgAudio.src.endsWith('your-music.mp3')) {
+        // no file - do nothing (or synth)
+        return;
+      }
+      try {
+        await bgAudio.play();
+        musicBtn.classList.add('playing'); musicBtn.textContent = '🔊';
+      } catch(e){
+        // browser blocked autoplay — user must click music button
+        musicBtn.classList.remove('playing'); musicBtn.textContent = '🔇';
+      }
+    }
+
+    // Small web-audio synth fallback if user hasn't provided mp3
+    function playSynthSnippet(){
+      try {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        const ac = new AC();
+        const now = ac.currentTime;
+        const master = ac.createGain(); master.gain.value = 0.0001; master.connect(ac.destination);
+        master.gain.exponentialRampToValueAtTime(0.12, now + 0.4);
+
+        const osc1 = ac.createOscillator(); osc1.type='sine';
+        const g1 = ac.createGain(); g1.gain.value=0; osc1.connect(g1); g1.connect(master);
+        osc1.frequency.value = 440 * Math.pow(2,-5/12); // warm low
+        osc1.start(now);
+        g1.gain.linearRampToValueAtTime(0.07, now + 0.2);
+        g1.gain.exponentialRampToValueAtTime(0.001, now + 4.5);
+        setTimeout(()=>{ osc1.stop(); ac.close(); }, 5000);
+      } catch(e) { console.warn(e) }
+    }
+
+    // Toast helper
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(()=> toast.classList.remove('show'), 2000);
+    }
+
+    // Accessibility: keyboard open
+    openBtn.addEventListener('keydown', (e)=> { if (e.key==='Enter') openLetter(true); });
+
+    // Init: small entrance animation
+    setTimeout(()=> { document.querySelector('.wrap').style.transform = 'translateY(0)'; }, 240);
+
+    // Helpful: if user double-clicks note area, open edit prompt
+    note.addEventListener('dblclick', ()=> {
+      const newt = prompt('Edit the note (double-click to edit):', paper.innerText.trim());
+      if (newt !== null) { paper.innerText = newt; note.innerText = newt; }
+    });
+
+    // prevent accidental selection drag on envelope
+    env.addEventListener('dragstart', (e)=> e.preventDefault());
+  </script>
+</body>
+</html>

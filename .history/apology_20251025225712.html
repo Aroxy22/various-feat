@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>For Rajjo — I'm Sorry 💌</title>
+  
+  <!-- Handwritten font -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #FFF7F5;
+      --card: #fff;
+      --accent: #FF6B81;
+      --muted: #6b6b6b;
+      --paper: #fff9f5;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(180deg, #FFF7F5, #FFF);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .sorry-header {
+      text-align: center;
+      margin-bottom: 30px;
+      animation: fadeIn 1s ease-in;
+    }
+
+    .sorry-header h1 {
+      font-size: 3.5em;
+      color: var(--accent);
+      text-shadow: 2px 2px 10px rgba(255, 107, 129, 0.3);
+      margin-bottom: 10px;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .password-screen {
+      background: white;
+      padding: 40px;
+      border-radius: 20px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      animation: fadeIn 0.5s ease-in;
+    }
+
+    .password-screen h2 {
+      color: var(--accent);
+      margin-bottom: 15px;
+      font-size: 1.8em;
+    }
+
+    .password-screen p {
+      color: var(--muted);
+      margin-bottom: 25px;
+    }
+
+    .password-screen input {
+      width: 100%;
+      padding: 15px;
+      font-size: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      margin-bottom: 15px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .password-screen input:focus {
+      border-color: var(--accent);
+    }
+
+    .password-screen button {
+      width: 100%;
+      padding: 15px;
+      font-size: 18px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 18px rgba(255, 107, 129, 0.3);
+    }
+
+    .password-screen button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(255, 107, 129, 0.4);
+    }
+
+    .error {
+      color: #e63946;
+      margin-top: 15px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .error.show {
+      display: block;
+      animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .main-content {
+      display: none;
+      max-width: 1000px;
+      width: 100%;
+      animation: fadeIn 0.8s ease-in;
+    }
+
+    .main-content.show {
+      display: block;
+    }
+
+    .stage {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 25px;
+      margin-top: 20px;
+    }
+
+    .card {
+      background: white;
+      border-radius: 14px;
+      padding: 30px;
+      box-shadow: 0 12px 30px rgba(20, 20, 20, 0.06);
+    }
+
+    .envelope-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+      min-height: 400px;
+      justify-content: center;
+    }
+
+    .envelope-title {
+      font-weight: 700;
+      font-size: 20px;
+      color: #333;
+      text-align: center;
+    }
+
+    .hint {
+      font-size: 14px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .envelope-wrapper {
+      position: relative;
+      width: 320px;
+      height: 220px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+
+    .envelope-wrapper:hover {
+      transform: scale(1.02);
+    }
+
+    .envelope {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #fff7f7, #fff);
+      position: relative;
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+    }
+
+    .envelope-flap {
+      position: absolute;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(180deg, #ffecec, #fff2f2);
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+      box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.03);
+      z-index: 2;
+    }
+
+    .envelope.open .envelope-flap {
+      transform: rotateX(-180deg) translateY(-68%);
+    }
+
+    .envelope-paper {
+      position: absolute;
+      left: 12px;
+      right: 12px;
+      top: 28%;
+      bottom: 12px;
+      background: linear-gradient(180deg, var(--paper), #fff);
+      border-radius: 6px;
+      padding: 18px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transform: translateY(8px) scale(0.99);
+      opacity: 0;
+      transition: all 0.6s cubic-bezier(0.2, 0.9, 0.3, 1);
+      overflow-y: auto;
+      font-family: 'Dancing Script', cursive;
+      font-size: 16px;
+      line-height: 1.6;
+      color: #2b2b2b;
+    }
+
+    .envelope.open .envelope-paper {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+
+    .tap-hint {
+      display: inline-block;
+      padding: 10px 16px;
+      border-radius: 10px;
+      background: rgba(255, 107, 129, 0.1);
+      color: var(--accent);
+      font-weight: 600;
+      margin-top: 15px;
+    }
+
+    .message-section h2 {
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .note-display {
+      background: linear-gradient(180deg, #fffefc, #fffaf6);
+      border-radius: 12px;
+      padding: 25px;
+      min-height: 250px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.04);
+      font-family: 'Dancing Script', cursive;
+      font-size: 20px;
+      line-height: 1.6;
+      color: #2b2b2b;
+      white-space: pre-wrap;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 18px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: 700;
+      font-size: 14px;
+      transition: all 0.2s;
+      box-shadow: 0 8px 18px rgba(255, 107, 129, 0.2);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(255, 107, 129, 0.3);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn.alt {
+      background: transparent;
+      color: var(--accent);
+      border: 2px solid rgba(255, 107, 129, 0.3);
+      box-shadow: none;
+    }
+
+    .btn.alt:hover {
+      background: rgba(255, 107, 129, 0.05);
+    }
+
+    .small-text {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 12px;
+    }
+
+    /* Floating hearts */
+    .hearts-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1000;
+      overflow: hidden;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 24px;
+      animation: floatUp 4s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .music-btn {
+      position: fixed;
+      bottom: 25px;
+      right: 25px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: white;
+      border: none;
+      font-size: 28px;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      transition: all 0.3s;
+      z-index: 1001;
+    }
+
+    .music-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 880px) {
+      .stage {
+        grid-template-columns: 1fr;
+      }
+      
+      .sorry-header h1 {
+        font-size: 2.5em;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="hearts-container" id="heartsContainer"></div>
+
+  <div style="max-width: 1200px; width: 100%;">
+    <div class="sorry-header">
+      <h1>I'm Sorry 💕</h1>
+    </div>
+
+    <!-- Password Screen -->
+    <div id="passwordScreen" class="password-screen">
+      <h2>For My Special Rajjo</h2>
+      <p>Enter the password to unlock my heartfelt apology</p>
+      <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off">
+      <button onclick="checkPassword()">Unlock Letter</button>
+      <div id="errorMsg" class="error">Wrong password! Try again 💔</div>
+      <p class="small-text" style="margin-top: 20px;">Hint: Three words, all lowercase, no spaces 😊</p>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content">
+      <div class="stage">
+        <!-- Left: Envelope -->
+        <div class="card envelope-section">
+          <div class="envelope-title">Open the Letter for Rajjo</div>
+          <div class="hint">Click the envelope to reveal my heartfelt note and hear a gentle tune</div>
+          
+          <div class="envelope-wrapper" onclick="openEnvelope()">
+            <div id="envelope" class="envelope">
+              <div class="envelope-flap"></div>
+              <div class="envelope-paper" id="envelopePaper">
+Dear Rajjo,
+
+I'm really sorry for that silly comment earlier. I didn't mean to make fun of your pens — I actually love how much care you put into the little things. You make ordinary moments feel special.
+
+Can we please start fresh? I promise to be kinder (and to borrow pens properly next time 😉).
+
+You mean the world to me.
+
+Love,
+— Your idiot (who adores you) ❤️
+              </div>
+            </div>
+          </div>
+          
+          <div class="tap-hint">👆 Tap to Open</div>
+          
+          <button class="btn alt" onclick="editMessage()" style="margin-top: 15px;">✏️ Edit Message</button>
+          <div class="small-text">Personalize the note to make it even more meaningful!</div>
+        </div>
+
+        <!-- Right: Message Display -->
+        <div class="card message-section">
+          <h2>For Rajjo 💖</h2>
+          <div class="subtitle">A handwritten note, just for you</div>
+          
+          <div class="note-display" id="noteDisplay">
+Dear Rajjo,
+
+I'm really sorry for that silly comment earlier. I didn't mean to make fun of your pens — I actually love how much care you put into the little things. You make ordinary moments feel special.
+
+Can we please start fresh? I promise to be kinder (and to borrow pens properly next time 😉).
+
+You mean the world to me.
+
+Love,
+— Your idiot (who adores you) ❤️
+          </div>
+          
+          <div class="controls">
+            <button id="openBtn" class="btn" onclick="openEnvelope()">🎵 Open & Play Tune</button>
+            <button class="btn alt" onclick="copyMessage()">📋 Copy Message</button>
+          </div>
+          
+          <div class="small-text">
+            The tune will play when you open the letter. Music is created using Web Audio API, so no files needed!
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button class="music-btn" id="musicBtn" onclick="toggleMusic()">🔇</button>
+
+  <script>
+    // Password (change this to your preference)
+    const PASSWORD = "iloveyou";
+    
+    let isOpen = false;
+    let musicPlaying = false;
+    let audioContext = null;
+
+    // Check password
+    function checkPassword() {
+      const input = document.getElementById('passwordInput');
+      const error = document.getElementById('errorMsg');
+      
+      if (input.value.toLowerCase() === PASSWORD.toLowerCase()) {
+        document.getElementById('passwordScreen').classList.add('hidden');
+        document.getElementById('mainContent').classList.add('show');
+        error.classList.remove('show');
+        createHearts(5);
+      } else {
+        error.classList.add('show');
+        input.value = '';
+        input.focus();
+      }
+    }
+
+    // Enter key on password
+    document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') checkPassword();
+    });
+
+    // Open envelope
+    function openEnvelope() {
+      if (isOpen) return;
+      
+      const envelope = document.getElementById('envelope');
+      const openBtn = document.getElementById('openBtn');
+      
+      envelope.classList.add('open');
+      openBtn.disabled = true;
+      openBtn.textContent = '✅ Opened';
+      isOpen = true;
+      
+      // Play tune
+      playTune();
+      
+      // Create hearts
+      setTimeout(() => createHearts(8), 800);
+    }
+
+    // Edit message
+    function editMessage() {
+      const paper = document.getElementById('envelopePaper');
+      const display = document.getElementById('noteDisplay');
+      const newText = prompt('Edit your message (make it personal!):', paper.textContent.trim());
+      
+      if (newText !== null && newText.trim() !== '') {
+        paper.textContent = newText;
+        display.textContent = newText;
+      }
+    }
+
+    // Copy message
+    async function copyMessage() {
+      const text = document.getElementById('noteDisplay').textContent;
+      try {
+        await navigator.clipboard.writeText(text.trim());
+        alert('Message copied to clipboard! 💕');
+      } catch (e) {
+        alert('Could not copy. Please select and copy manually.');
+      }
+    }
+
+    // Create floating hearts
+    function createHearts(count) {
+      const container = document.getElementById('heartsContainer');
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const heart = document.createElement('div');
+          heart.className = 'heart';
+          heart.textContent = '❤️';
+          heart.style.left = Math.random() * 100 + '%';
+          heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+          container.appendChild(heart);
+          
+          setTimeout(() => heart.remove(), 4000);
+        }, i * 150);
+      }
+    }
+
+    // Play gentle tune
+    function playTune() {
+      if (audioContext) return;
+      
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const now = audioContext.currentTime;
+      
+      // Master gain
+      const masterGain = audioContext.createGain();
+      masterGain.gain.setValueAtTime(0.0001, now);
+      masterGain.gain.exponentialRampToValueAtTime(0.15, now + 0.5);
+      masterGain.connect(audioContext.destination);
+      
+      // Play a gentle melody
+      const notes = [
+        { freq: 523.25, time: 0, duration: 0.8 },     // C5
+        { freq: 587.33, time: 0.8, duration: 0.8 },   // D5
+        { freq: 659.25, time: 1.6, duration: 0.8 },   // E5
+        { freq: 698.46, time: 2.4, duration: 1.2 },   // F5
+        { freq: 659.25, time: 3.8, duration: 0.6 },   // E5
+        { freq: 587.33, time: 4.6, duration: 1.4 }    // D5
+      ];
+      
+      notes.forEach(note => {
+        const osc = audioContext.createOscillator();
+        const gain = audioContext.createGain();
+        
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(note.freq, now + note.time);
+        
+        gain.gain.setValueAtTime(0, now + note.time);
+        gain.gain.linearRampToValueAtTime(0.3, now + note.time + 0.1);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + note.time + note.duration);
+        
+        osc.connect(gain);
+        gain.connect(masterGain);
+        
+        osc.start(now + note.time);
+        osc.stop(now + note.time + note.duration);
+      });
+      
+      // Fade out and cleanup
+      masterGain.gain.exponentialRampToValueAtTime(0.0001, now + 7);
+      setTimeout(() => {
+        if (audioContext) {
+          audioContext.close();
+          audioContext = null;
+        }
+      }, 8000);
+      
+      // Update music button
+      document.getElementById('musicBtn').textContent = '🔊';
+      musicPlaying = true;
+      setTimeout(() => {
+        document.getElementById('musicBtn').textContent = '🔇';
+        musicPlaying = false;
+      }, 8000);
+    }
+
+    // Toggle music button (plays tune again)
+    function toggleMusic() {
+      if (!musicPlaying && isOpen) {
+        playTune();
+        createHearts(5);
+      }
+    }
+
+    // Create ambient hearts periodically
+    setInterval(() => {
+      if (document.getElementById('mainContent').classList.contains('show')) {
+        createHearts(1);
+      }
+    }, 3000);
+  </script>
+</body>
+</html>

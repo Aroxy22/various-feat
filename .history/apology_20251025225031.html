@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For Rajjo — I'm Sorry 💌</title>
+
+  <!-- Handwritten font -->
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#FFF7F5;
+      --card:#fff;
+      --accent:#FF6B81;
+      --muted:#6b6b6b;
+      --paper:#fff9f5;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;background: linear-gradient(180deg,#FFF7F5,#FFF);display:flex;align-items:center;justify-content:center;padding:28px}
+    .stage{width:880px;max-width:96%;display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+    .card{background:var(--card);border-radius:14px;padding:20px;box-shadow:0 12px 30px rgba(20,20,20,0.06)}
+    .left{display:flex;flex-direction:column;gap:16px;align-items:center;justify-content:center;min-height:420px}
+    /* Envelope */
+    .env-wrap{width:320px;height:220px;position:relative,pointer-events:auto;cursor:pointer}
+    .envelope{
+      width:320px;height:220px;border-radius:8px;background:linear-gradient(180deg,#fff7f7,#fff);
+      position:relative;box-shadow:0 8px 28px rgba(0,0,0,0.08);overflow:hidden;transform-origin:center;transition:transform .32s;
+    }
+    .envelope .flap{
+      position:absolute;left:0;right:0;top:0;height:50%;
+      background:linear-gradient(180deg,#ffecec,#fff2f2);transform-origin:top center;
+      clip-path:polygon(0 0,100% 0,50% 100%);
+      transition:transform .6s cubic-bezier(.2,.9,.3,1);
+      box-shadow:inset 0 -2px 0 rgba(0,0,0,0.03);
+    }
+    .envelope.closed .flap{transform:translateY(0) rotateX(0deg)}
+    .envelope.open .flap{transform:translateY(-68%) rotateX(-180deg)}
+    .envelope .paper {
+      position:absolute;left:12px;right:12px;bottom:12px;top:28%;
+      background:linear-gradient(180deg,var(--paper),#fff);border-radius:6px;padding:18px;box-shadow:inset 0 1px 0 rgba(0,0,0,0.02);
+      transform-origin:top center;transition:transform .6s cubic-bezier(.2,.9,.3,1),opacity .4s;
+      opacity:0;transform: translateY(8px) scale(.99);
+    }
+    .envelope.open .paper{opacity:1;transform: translateY(0) scale(1)}
+
+    .hint{font-size:13px;color:var(--muted);text-align:center}
+    .touch{display:inline-block;margin-top:6px;padding:8px 12px;border-radius:10px;background:rgba(255,107,129,0.08);color:var(--accent);font-weight:600}
+
+    /* Right: message area */
+    .right{display:flex;flex-direction:column;gap:12px;min-height:420px}
+    h1{margin:0;font-size:26px}
+    .subtitle{color:var(--muted);margin-top:6px}
+    .note-area{
+      margin-top:6px;background:linear-gradient(180deg,#fffefc,#fffaf6);border-radius:12px;padding:16px;min-height:220px;position:relative;box-shadow:0 8px 20px rgba(0,0,0,0.04)
+    }
+    .hand{
+      font-family:'Dancing Script',cursive;font-size:20px;color:#2b2b2b;line-height:1.5;white-space:pre-wrap;
+    }
+    .controls{display:flex;gap:10px;margin-top:12px;flex-wrap:wrap}
+    .btn{padding:10px 14px;border-radius:10px;background:var(--accent);color:white;border:none;cursor:pointer;font-weight:700;box-shadow:0 8px 18px rgba(255,107,129,0.12)}
+    .btn.alt{background:transparent;color:var(--accent);border:2px solid rgba(255,107,129,0.14)}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* hearts rising */
+    .hearts{position:absolute;left:50%;top:0;width:0;height:0;pointer-events:none}
+    .heart{
+      position:absolute;width:18px;height:18px;transform:translateX(-50%) scale(0.9);opacity:0;
+      background:radial-gradient(circle at 30% 30%, #fff, rgba(255,255,255,0.0) 35%),linear-gradient(180deg,#ff99a8,#ff4f7a);
+      clip-path: path('M10 3 C10 1.6 8.6 1 7.5 1 C6.4 1 5 1.6 5 3 C5 4.2 7.5 6.5 7.5 6.5 C7.5 6.5 10 4.2 10 3 Z');
+      border-radius:4px;
+      animation: rise 2.4s ease-out forwards;
+    }
+    @keyframes rise{
+      0%{transform:translateX(-50%) translateY(0) scale(.9);opacity:0}
+      10%{opacity:1}
+      100%{transform:translateX(-50%) translateY(-220px) scale(1.1);opacity:0}
+    }
+
+    /* responsive */
+    @media (max-width:880px){ .stage{grid-template-columns:1fr; } .left{order:2} .right{order:1} }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="card left" aria-hidden="false">
+      <div style="text-align:center">
+        <div style="font-weight:700;font-size:18px;color:#333">Open the letter for Rajjo</div>
+        <div class="hint">Click the envelope — it will play a little tune and reveal the note.</div>
+      </div>
+
+      <div class="env-wrap" role="button" aria-label="Open apology letter">
+        <div id="env" class="envelope closed" style="margin-top:18px;">
+          <div class="flap"></div>
+          <div class="paper" id="paper">
+            <!-- Handwritten note text (editable) -->
+            <div class="hand" id="handText">
+Dear Rajjo,
+
+I’m really sorry for the silly comment earlier. I didn’t mean to make fun of your pens — I love the care you put into the little things. You make ordinary moments feel special.
+
+Can we please start fresh? I promise to be kinder (and to borrow a pen properly next time 😉).
+
+Love,
+— Your idiot (who adores you)
+            </div>
+            <div style="position:absolute;right:14px;bottom:10px;font-family:'Dancing Script',cursive;font-size:18px;color:#b14a61">— Rajjo, you are loved</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="touch">Tap to open</div>
+        </div>
+      </div>
+
+      <div style="margin-top:10px;text-align:center">
+        <button id="editBtn" class="btn alt" style="font-weight:600">Edit message</button>
+        <div class="small" style="margin-top:8px">Tip: Use "Edit message" to make it more personal (add her favorite pen color, or an inside-joke)</div>
+      </div>
+    </div>
+
+    <div class="card right" aria-live="polite">
+      <h1>For Rajjo <span style="font-size:20px;margin-left:6px">💖</span></h1>
+      <div class="subtitle">A little handwritten note, just for you.</div>
+
+      <div class="note-area" id="noteArea">
+        <div class="hand" id="displayHand">
+          <!-- same text mirrored for display; will be synchronized -->
+          Dear Rajjo,
+
+I’m really sorry for the silly comment earlier. I didn’t mean to make fun of your pens — I love the care you put into the little things. You make ordinary moments feel special.
+
+Can we please start fresh? I promise to be kinder (and to borrow a pen properly next time 😉).
+
+Love,
+— Your idiot (who adores you)
+        </div>
+        <!-- floating hearts container -->
+        <div id="hearts" class="hearts" aria-hidden="true"></div>
+      </div>
+
+      <div class="controls">
+        <button id="openBtn" class="btn">Open my apology (play tune)</button>
+        <button id="downloadBtn" class="btn alt">Download this Note 💌</button>
+        <button id="copyBtn" class="btn alt">Copy message</button>
+      </div>
+
+      <div style="margin-top:8px" class="small">
+        After opening the letter the tune will play (it starts only because you clicked). Use "Edit message" to personalize the note before downloading.
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden canvas used for PNG generation -->
+  <canvas id="outCanvas" width="1200" height="900" style="display:none"></canvas>
+
+  <script>
+    // PERSONALIZATION: default name is Rajjo (already in text)
+    const env = document.getElementById('env');
+    const paper = document.getElementById('paper');
+    const handText = document.getElementById('handText');
+    const displayHand = document.getElementById('displayHand');
+    const openBtn = document.getElementById('openBtn');
+    const editBtn = document.getElementById('editBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const hearts = document.getElementById('hearts');
+    const outCanvas = document.getElementById('outCanvas');
+    const ctx = outCanvas.getContext('2d');
+
+    // Allow editing of the note via a prompt (keeps it simple)
+    editBtn.addEventListener('click', ()=>{
+      const current = handText.innerText.trim();
+      const updated = prompt("Edit the note (keep it sincere) — it will appear handwriting-style:", current);
+      if(updated !== null){
+        // preserve paragraph breaks
+        handText.innerText = updated;
+        displayHand.innerText = updated;
+      }
+    });
+
+    // Clicking envelope/open button
+    function openEnvelope(){
+      if(env.classList.contains('open')) return;
+      env.classList.remove('closed');
+      env.classList.add('open');
+      openBtn.disabled = true;
+      openBtn.innerText = 'Opened ✅';
+      // update display text
+      displayHand.innerText = handText.innerText;
+      // play gentle synth tune
+      playTune();
+      // hearts rise softly after a short delay
+      setTimeout(()=> riseHearts(6), 900);
+    }
+
+    // envelope click
+    env.addEventListener('click', openEnvelope);
+    openBtn.addEventListener('click', ()=>{
+      // also open envelope visually by scrolling to it
+      env.scrollIntoView({behavior:'smooth',block:'center'}); openEnvelope();
+    });
+
+    // Copy message
+    copyBtn.addEventListener('click', async ()=>{
+      try{
+        await navigator.clipboard.writeText(handText.innerText.trim());
+        alert('Message copied — paste it anywhere you like 😊');
+      }catch(e){ alert('Could not copy automatically. Please select and copy the message.'); }
+    });
+
+    // Create rising hearts
+    function riseHearts(n=5){
+      for(let i=0;i<n;i++){
+        const h = document.createElement('div');
+        h.className = 'heart';
+        // random x offset
+        const offset = (Math.random()*280)-140;
+        h.style.left = `calc(50% + ${offset}px)`;
+        h.style.bottom = '20px';
+        h.style.animationDelay = (i*120)+'ms';
+        h.style.background = `linear-gradient(180deg, hsl(${Math.floor(Math.random()*30)+330},85%,82%), hsl(${Math.floor(Math.random()*30)+320},68%,56%))`;
+        hearts.appendChild(h);
+        // auto-remove
+        setTimeout(()=>h.remove(), 2600);
+      }
+    }
+
+    // Download PNG: render a pretty paper with handwriting
+    downloadBtn.addEventListener('click', async ()=>{
+      // ensure the note is visible/open
+      if(!env.classList.contains('open')){
+        openEnvelope();
+        await new Promise(r=>setTimeout(r,600));
+      }
+
+      // wait for font to be loaded before rendering
+      await document.fonts.load('20px "Dancing Script"');
+
+      // canvas size (high-res)
+      const W = 1200, H = 900;
+      outCanvas.width = W; outCanvas.height = H;
+
+      // paper background
+      // soft cream
+      const g = ctx.createLinearGradient(0,0,0,H);
+      g.addColorStop(0,'#fffdf9'); g.addColorStop(1,'#fff7f2');
+      ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+
+      // subtle paper texture: faint noise
+      for(let i=0;i<4200;i++){
+        ctx.fillStyle = 'rgba(0,0,0,' + (Math.random()*0.02) + ')';
+        ctx.fillRect(Math.random()*W, Math.random()*H, 1,1);
+      }
+
+      // margin and header
+      const pad = 80;
+      ctx.fillStyle = '#f4dfe0';
+      ctx.fillRect(pad-20,pad-28,W-2*pad+40,8);
+      ctx.fillStyle = '#2b2b2b';
+      ctx.font = '700 32px "Dancing Script"';
+      ctx.fillText('A Note for Rajjo', pad, pad-40);
+
+      // render the handwritten message
+      const text = handText.innerText.trim();
+      ctx.fillStyle = '#2b2b2b';
+      ctx.font = '28px "Dancing Script"';
+      const lineHeight = 46;
+      const words = text.split('\n');
+      let y = pad + 20;
+      for(let i=0;i<words.length;i++){
+        // wrap long lines roughly
+        const line = words[i];
+        const maxW = W - 2*pad;
+        if(ctx.measureText(line).width < maxW){
+          ctx.fillText(line, pad, y);
+          y += lineHeight;
+        } else {
+          // naive wrap
+          const parts = line.split(' ');
+          let cur = '';
+          for(let wpart of parts){
+            const test = cur ? (cur + ' ' + wpart) : wpart;
+            if(ctx.measureText(test).width < maxW){
+              cur = test;
+            } else {
+              ctx.fillText(cur, pad, y); y += lineHeight; cur = wpart;
+            }
+          }
+          if(cur){ ctx.fillText(cur, pad, y); y += lineHeight; }
+        }
+      }
+
+      // signature
+      ctx.font = '36px "Dancing Script"';
+      ctx.fillStyle = '#a33a56';
+      ctx.fillText('— Love, You', pad, y + 30);
+
+      // tiny heart stamp
+      ctx.fillStyle = '#ff4f7a';
+      ctx.beginPath();
+      ctx.moveTo(W - pad - 24, H - pad - 20);
+      ctx.arc(W - pad - 28, H - pad - 14, 6, 0, Math.PI*2);
+      ctx.arc(W - pad - 12, H - pad - 14, 6, 0, Math.PI*2);
+      ctx.moveTo(W - pad - 24, H - pad - 6);
+      ctx.fill();
+
+      // trigger download
+      const data = outCanvas.toDataURL('image/png');
+      const a = document.createElement('a'); a.href = data; a.download = 'sorry_for_Rajjo.png'; a.click();
+
+      // gentle heart rise
+      riseHearts(8);
+    });
+
+    // Simple WebAudio synth tune (no external files)
+    let audioCtx = null;
+    function playTune(){
+      if(audioCtx) return; // already played
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const now = audioCtx.currentTime;
+
+      // master gain
+      const master = audioCtx.createGain(); master.gain.value = 0.0001; master.connect(audioCtx.destination);
+      // fade in
+      master.gain.exponentialRampToValueAtTime(0.12, now + 0.6);
+
+      // create gentle pad using two oscillators
+      const oscA = audioCtx.createOscillator();
+      const oscB = audioCtx.createOscillator();
+      const gainA = audioCtx.createGain();
+      const gainB = audioCtx.createGain();
+
+      oscA.type = 'sine'; oscB.type = 'sine';
+      // chord notes (MIDI A4-ish)
+      const base = 440 * Math.pow(2, -5/12); // a lower tone
+      oscA.frequency.value = base;
+      oscB.frequency.value = base * 1.498; // fifth-ish
+
+      gainA.gain.value = 0.0; gainB.gain.value = 0.0;
+      oscA.connect(gainA); oscB.connect(gainB);
+      gainA.connect(master); gainB.connect(master);
+
+      // gentle envelope
+      gainA.gain.linearRampToValueAtTime(0.06, now + 0.8);
+      gainB.gain.linearRampToValueAtTime(0.05, now + 0.8);
+
+      oscA.start(now); oscB.start(now);
+
+      // play a simple sequence of notes using periodic frequency changes
+      const seq = [
+        {t:0, f:base},
+        {t:0.6, f: base * 1.122}, // major second-ish
+        {t:1.2, f: base * 1.189}, // minor third-ish
+        {t:1.8, f: base * 1.334}, // perfect fourth-ish
+      ];
+      seq.forEach(s=>{
+        oscA.frequency.setValueAtTime(s.f, now + s.t);
+        oscB.frequency.setValueAtTime(s.f * 1.5, now + s.t);
+      });
+
+      // slowly end after 6s
+      master.gain.exponentialRampToValueAtTime(0.0001, now + 6.8);
+      setTimeout(()=>{oscA.stop(); oscB.stop(); try{audioCtx.close()}catch(e){} audioCtx = null;}, 7400);
+    }
+
+    // allow editing inline (double click)
+    displayHand.addEventListener('dblclick', ()=>{
+      const newText = prompt('Edit the note (double-click to edit):', handText.innerText);
+      if(newText !== null){
+        handText.innerText = newText;
+        displayHand.innerText = newText;
+      }
+    });
+
+    // preload font to make canvas rendering consistent
+    document.fonts.load('28px "Dancing Script"').catch(()=>{});
+
+    // small accessibility: Enter on openBtn triggers open
+    openBtn.addEventListener('keydown', (e)=>{ if(e.key === 'Enter' || e.key === ' ') { openEnvelope(); }});
+  </script>
+</body>
+</html>

@@ -1,0 +1,1259 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>For Rajjo — I'm Sorry 💌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-attachment: fixed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body.unlocked {
+      display: block;
+      padding: 0;
+      overflow-y: auto;
+      align-items: flex-start;
+    }
+
+    /* Animated background particles */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 50%;
+      animation: float 15s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) translateX(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-100vh) translateX(50px); opacity: 0; }
+    }
+
+    /* Main container */
+    .container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1200px;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .container.unlocked {
+      max-width: 100%;
+    }
+
+    /* Lock screen */
+    .lock-screen {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 60px 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .lock-icon {
+      width: 80px;
+      height: 80px;
+      margin: 0 auto 30px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 40px;
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .lock-screen h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      color: #1a202c;
+      margin-bottom: 12px;
+    }
+
+    .lock-screen p {
+      color: #718096;
+      font-size: 16px;
+      margin-bottom: 30px;
+      line-height: 1.6;
+    }
+
+    .hint-box {
+      background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+      padding: 20px;
+      border-radius: 16px;
+      margin: 25px 0;
+      box-shadow: 0 8px 20px rgba(253, 203, 110, 0.3);
+    }
+
+    .hint-box strong {
+      display: block;
+      color: #d63031;
+      font-size: 14px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hint-box p {
+      color: #2d3436;
+      font-size: 15px;
+      margin: 0;
+    }
+
+    .password-input {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      margin: 25px 0;
+    }
+
+    .password-input input {
+      width: 60px;
+      height: 70px;
+      font-size: 32px;
+      font-weight: bold;
+      text-align: center;
+      border: 3px solid #e2e8f0;
+      border-radius: 12px;
+      transition: all 0.3s;
+      outline: none;
+    }
+
+    .password-input input:focus {
+      border-color: #667eea;
+      box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+    }
+
+    .password-input input.error {
+      border-color: #e74c3c;
+      animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-10px); }
+      75% { transform: translateX(10px); }
+    }
+
+    .unlock-btn {
+      width: 100%;
+      padding: 16px;
+      font-size: 18px;
+      font-weight: 600;
+      color: white;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+
+    .unlock-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+    }
+
+    .error-msg {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 12px;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .error-msg.show {
+      opacity: 1;
+    }
+
+    /* Letter content */
+    .letter-content {
+      display: none;
+    }
+
+    .letter-content.unlocked {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .letter-left {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 60px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: white;
+      position: relative;
+      overflow: hidden;
+      min-height: 100vh;
+    }
+
+    .letter-left::before {
+      content: '';
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      top: -150px;
+      right: -150px;
+    }
+
+    .envelope-animation {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 30px;
+      position: relative;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .envelope-animation svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.2));
+    }
+
+    .letter-left h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 42px;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .letter-left p {
+      font-size: 18px;
+      opacity: 0.95;
+      line-height: 1.6;
+      max-width: 350px;
+    }
+
+    .letter-right {
+      padding: 60px 50px;
+      padding-bottom: 120px;
+      display: flex;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      min-height: 100vh;
+    }
+
+    .letter-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 30px;
+    }
+
+    .letter-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      color: #1a202c;
+    }
+
+    .music-controls {
+      display: flex;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      width: 44px;
+      height: 44px;
+      border: none;
+      border-radius: 12px;
+      background: #f7fafc;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .icon-btn:hover {
+      background: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
+    }
+
+    .letter-text {
+      flex: 1;
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      border-radius: 16px;
+      padding: 40px;
+      font-family: 'Playfair Display', serif;
+      font-size: 19px;
+      line-height: 1.9;
+      color: #2d3748;
+      white-space: pre-wrap;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.05);
+      overflow-y: auto;
+      max-height: 500px;
+    }
+
+    .letter-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      flex: 1;
+      min-width: 140px;
+      padding: 14px 24px;
+      font-size: 15px;
+      font-weight: 600;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      background: white;
+      color: #4a5568;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .action-btn:hover {
+      border-color: #667eea;
+      color: #667eea;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.2);
+    }
+
+    .action-btn.primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+    }
+
+    .action-btn.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+    }
+
+    /* Fortune Cookie Button */
+    .fortune-cookie-btn {
+      padding: 18px 40px;
+      font-size: 18px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .fortune-cookie-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 12px 30px rgba(255, 107, 107, 0.5);
+    }
+
+    .fortune-cookie-btn:active {
+      transform: translateY(-1px) scale(1.02);
+    }
+
+    .fortune-cookie-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .fortune-cookie-btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .fortune-cookie-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Fortune Cookie Modal */
+    .fortune-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(10px);
+      z-index: 3000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .fortune-modal.active {
+      display: flex;
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .fortune-container {
+      position: relative;
+      max-width: 500px;
+      width: 100%;
+      background: white;
+      border-radius: 24px;
+      padding: 50px 40px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      animation: fortuneSlide 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes fortuneSlide {
+      from {
+        opacity: 0;
+        transform: scale(0.8) translateY(50px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .fortune-cookie-icon {
+      font-size: 100px;
+      margin-bottom: 20px;
+      animation: cookieCrack 0.8s ease-out 0.3s;
+      display: inline-block;
+    }
+
+    @keyframes cookieCrack {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-15deg) scale(1.1); }
+      75% { transform: rotate(15deg) scale(1.1); }
+    }
+
+    .fortune-message {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 700;
+      color: #667eea;
+      margin-bottom: 15px;
+      animation: messageReveal 0.8s ease-out 0.6s both;
+    }
+
+    @keyframes messageReveal {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .fortune-submessage {
+      font-size: 18px;
+      color: #718096;
+      margin-bottom: 30px;
+      line-height: 1.6;
+      animation: messageReveal 0.8s ease-out 0.8s both;
+    }
+
+    .fortune-close-btn {
+      padding: 14px 32px;
+      font-size: 16px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
+      animation: messageReveal 0.8s ease-out 1s both;
+    }
+
+    .fortune-close-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+    }
+
+    .fortune-buttons {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin-top: 20px;
+      animation: messageReveal 0.8s ease-out 1s both;
+    }
+
+    .fortune-yes-btn,
+    .fortune-no-btn {
+      padding: 14px 40px;
+      font-size: 18px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .fortune-yes-btn {
+      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+      color: white;
+    }
+
+    .fortune-yes-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(72, 187, 120, 0.4);
+    }
+
+    .fortune-no-btn {
+      background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
+      color: white;
+      position: absolute;
+      transition: all 0.3s ease-out;
+    }
+
+    .forgiveness-message {
+      display: none;
+    }
+
+    .forgiveness-message.show {
+      display: block;
+      animation: messageReveal 0.8s ease-out;
+    }
+
+    .hearts-burst {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .heart-particle {
+      position: absolute;
+      font-size: 24px;
+      animation: heartFloat 2s ease-out forwards;
+      opacity: 0;
+    }
+
+    @keyframes heartFloat {
+      0% {
+        opacity: 1;
+        transform: translateY(0) scale(0);
+      }
+      50% {
+        opacity: 1;
+        transform: translateY(-100px) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-200px) scale(0.5);
+      }
+    }
+
+    /* Slideshow Section */
+    .slideshow-section {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      padding: 80px 40px 100px;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .slideshow-header {
+      margin-bottom: 40px;
+    }
+
+    .slideshow-header h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 36px;
+      color: #1a202c;
+      margin-bottom: 12px;
+    }
+
+    .slideshow-header p {
+      color: #718096;
+      font-size: 18px;
+    }
+
+    .slideshow-container {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      background: white;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+    }
+
+    .slideshow-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(255, 255, 255, 0.95);
+      border: none;
+      border-radius: 50%;
+      font-size: 28px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      z-index: 10;
+      color: #667eea;
+      font-weight: bold;
+    }
+
+    .slideshow-nav:hover {
+      background: #667eea;
+      color: white;
+      transform: translateY(-50%) scale(1.1);
+      box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+    }
+
+    .slideshow-nav.prev { left: -25px; }
+    .slideshow-nav.next { right: -25px; }
+
+    .slideshow-image {
+      width: 100%;
+      height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .slideshow-image img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 12px;
+      opacity: 0;
+      animation: fadeInSlide 1s ease-in-out forwards;
+    }
+
+    @keyframes fadeInSlide {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .slideshow-caption {
+      display: none;
+    }
+
+    .slideshow-progress {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-top: 25px;
+    }
+
+    .progress-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #cbd5e0;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .progress-dot:hover {
+      background: #a0aec0;
+      transform: scale(1.2);
+    }
+
+    .progress-dot.active {
+      background: #667eea;
+      width: 30px;
+      border-radius: 5px;
+    }
+
+    /* Toast notification */
+    .toast {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #1a202c;
+      color: white;
+      padding: 16px 28px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      font-weight: 600;
+      z-index: 1000;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .letter-content.unlocked {
+        grid-template-columns: 1fr;
+      }
+      
+      .letter-left {
+        padding: 50px 30px;
+        min-height: auto;
+      }
+      
+      .letter-right {
+        padding: 40px 30px;
+        min-height: auto;
+      }
+
+      .lock-screen {
+        padding: 40px 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .password-input input {
+        width: 50px;
+        height: 60px;
+        font-size: 28px;
+      }
+
+      .letter-actions {
+        flex-direction: column;
+      }
+
+      .action-btn {
+        width: 100%;
+      }
+    }
+
+    /* Hidden canvas */
+    canvas { display: none; }
+  </style>
+</head>
+<body>
+  <!-- Background particles -->
+  <div class="particles" id="particles"></div>
+
+  <div class="container">
+    <!-- Lock Screen -->
+    <div class="lock-screen" id="lockScreen">
+      <div class="lock-icon">🔒</div>
+      <h1>For Rajjo 💌</h1>
+      <p>This letter is protected. To unlock it, solve the puzzle below:</p>
+      
+      <div class="hint-box">
+        <strong>🎯 Hint:</strong>
+        <p>Number of times I made you angry × Birth year of your favorite singer (Diljit Dosanjh)</p>
+      </div>
+
+      <div class="password-input">
+        <input type="text" maxlength="1" id="digit1" />
+        <input type="text" maxlength="1" id="digit2" />
+        <input type="text" maxlength="1" id="digit3" />
+        <input type="text" maxlength="1" id="digit4" />
+        <input type="text" maxlength="1" id="digit5" />
+      </div>
+
+      <button class="unlock-btn" id="unlockBtn">Unlock Letter</button>
+      <div class="error-msg" id="errorMsg">Incorrect code. Think again! 💭</div>
+    </div>
+
+    <!-- Letter Content (hidden initially) -->
+    <div class="letter-content" id="letterContent">
+      <div class="letter-left">
+        <div class="envelope-animation">
+          <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="30" y="60" width="140" height="100" rx="8" fill="white" stroke="rgba(255,255,255,0.5)" stroke-width="2"/>
+            <path d="M30 60 L100 110 L170 60" stroke="rgba(255,255,255,0.8)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="100" cy="100" r="50" fill="rgba(255,255,255,0.1)"/>
+            <text x="100" y="110" text-anchor="middle" fill="white" font-size="40">💌</text>
+          </svg>
+        </div>
+        <h2>You Unlocked It!</h2>
+        <p>Here's my heartfelt apology, written just for you.</p>
+      </div>
+
+      <div class="letter-right">
+        <div class="letter-header">
+          <h3>My Sincere Apology</h3>
+          <div class="music-controls">
+            <button class="icon-btn" id="musicBtn" title="Play/Pause Music">🔇</button>
+          </div>
+        </div>
+
+        <div class="letter-text" id="letterText">Dear Rajjo,
+
+I want to start by saying I'm really sorry for that stupid comment I made. I know it wasn't sensitive, and I can imagine it made you feel bad, which is honestly the last thing I ever wanted.
+
+I mean seriously, how could I ever get the ick from you? Who am I even kidding? I've literally signed a lifelong contract with you. You're stuck with me forever, remember?
+
+Please don't mind my stupid tongue. I have this annoying habit of saying dumb things without realizing the impact they might have. I never mean to hurt you, and if you're upset, then I'm upset too — and that's never a good combo for either of us.
+
+I know I've made many mistakes (toooooo many), but I'm still learning how to be the perfect boyfriend for you. I promise I'm trying every single day, even when I mess up. I want to be the person who makes you smile when you wake up, who makes you feel safe and loved, and who always supports you — in the little things and the big things.
+
+You mean so much to me, Rajjo!!! More than words can ever express. I love the way you laugh, the little things you notice, and even the way you smirk at me when I do something dumb. Those tiny moments are what make everything so special.
+
+I want to be better for you — to listen more, tease less (okay maybe just a little 😏), and to make you feel as cherished as you make me feel every day. I can't promise I'll be perfect, but I can promise that I'll never stop trying, never stop loving, and never stop choosing you — because choosing you is honestly the easiest and best choice I've ever made.
+
+So, please forgive my stupidity, my clumsy words, and my silly mistakes. Give me a little time to get a little better at being your bf baba? I'll get there. I'll learn, I'll grow, and I'll make you proud to have me — or at least laugh at me in the process 😅.
+
+You're my favorite everything, Rajjo. I loveee uuu
+
+— The asshole</div>
+
+        <div class="letter-actions">
+          <button class="action-btn primary" id="downloadTxtBtn">
+            <span>📥</span> Download Letter
+          </button>
+          <button class="action-btn" id="copyBtn">
+            <span>📋</span> Copy Letter
+          </button>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+          <button class="fortune-cookie-btn" id="fortuneBtn">
+            🥠 Will You Forgive Me?
+          </button>
+        </div>
+
+        <div style="text-align: center; margin-top: 20px; color: #718096; font-size: 14px;">
+          <div style="margin-bottom: 15px;">💡 Scroll down for a special surprise ↓</div>
+          <div style="font-size: 24px; animation: bounce 2s infinite;">⬇️</div>
+        </div>
+      </div>
+
+      <!-- Slideshow Section -->
+      <div class="slideshow-section">
+        <div class="slideshow-header">
+          <h2>Some Pics to Make You a Little Happier 💕</h2>
+          <p>Our beautiful memories together</p>
+        </div>
+
+        <div class="slideshow-container">
+          <button class="slideshow-nav prev" id="slidePrev">‹</button>
+          <button class="slideshow-nav next" id="slideNext">›</button>
+          
+          <div class="slideshow-image" id="slideshowImage">
+            <img id="currentSlide" src="" alt="Our Memory">
+          </div>
+          <div class="slideshow-progress" id="slideshowProgress"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast">Action completed! ✓</div>
+
+  <!-- Fortune Cookie Modal -->
+  <div class="fortune-modal" id="fortuneModal">
+    <div class="fortune-container" id="fortuneContainer">
+      <div class="hearts-burst" id="heartsBurst"></div>
+      <div class="fortune-cookie-icon">🥠</div>
+      <div class="fortune-message">Will You Forgive Me?</div>
+      <div class="fortune-submessage">
+        Ofc Aryannn! You are forgiven
+      </div>
+      <div class="fortune-buttons">
+        <button class="fortune-yes-btn" id="fortuneYes">Yes! 💕</button>
+        <button class="fortune-no-btn" id="fortuneNo">No</button>
+      </div>
+      <div class="forgiveness-message" id="forgivenessMessage">
+        <div class="fortune-cookie-icon">🎉</div>
+        <button class="fortune-close-btn" id="fortuneClose">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hidden canvas for download -->
+  <canvas id="canvas" width="1400" height="1000"></canvas>
+
+  <!-- Load jsPDF from CDN for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+  <!-- Audio element (replace with your music file) -->
+  <audio id="bgAudio" src="Jaane Bhi De Heyy Babyy 128 Kbps.mp3" preload="auto"></audio>
+
+  <script>
+    // Generate floating particles
+    const particlesContainer = document.getElementById('particles');
+    for (let i = 0; i < 30; i++) {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDelay = Math.random() * 15 + 's';
+      particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+      particlesContainer.appendChild(particle);
+    }
+
+    // Password verification
+    const TIMES_ANGRY = 7;
+    const SINGER_YEAR = 1984;
+    const CORRECT_PASSWORD = String(TIMES_ANGRY * SINGER_YEAR);
+
+    const digit1 = document.getElementById('digit1');
+    const digit2 = document.getElementById('digit2');
+    const digit3 = document.getElementById('digit3');
+    const digit4 = document.getElementById('digit4');
+    const digit5 = document.getElementById('digit5');
+    const unlockBtn = document.getElementById('unlockBtn');
+    const errorMsg = document.getElementById('errorMsg');
+    const lockScreen = document.getElementById('lockScreen');
+    const letterContent = document.getElementById('letterContent');
+    const inputs = [digit1, digit2, digit3, digit4, digit5];
+
+    // Auto-focus next input
+    inputs.forEach((input, index) => {
+      input.addEventListener('input', (e) => {
+        if (e.target.value.length === 1 && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key === 'Backspace' && !e.target.value && index > 0) {
+          inputs[index - 1].focus();
+        }
+        if (e.key === 'Enter') {
+          unlockBtn.click();
+        }
+      });
+    });
+
+    // Unlock function
+    function unlockLetter() {
+      const enteredPassword = digit1.value + digit2.value + digit3.value + digit4.value + digit5.value;
+      
+      if (enteredPassword === CORRECT_PASSWORD) {
+        lockScreen.style.display = 'none';
+        letterContent.classList.add('unlocked');
+        document.body.classList.add('unlocked');
+        document.querySelector('.container').classList.add('unlocked');
+        showToast('Letter unlocked! 💖');
+        
+        // Scroll to top smoothly
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Start automatic slideshow
+        setTimeout(() => {
+          initSlideshow();
+          startSlideshow();
+        }, 1000);
+      } else {
+        errorMsg.classList.add('show');
+        inputs.forEach(input => {
+          input.classList.add('error');
+          input.value = '';
+        });
+        setTimeout(() => {
+          inputs.forEach(input => input.classList.remove('error'));
+          errorMsg.classList.remove('show');
+        }, 2000);
+        digit1.focus();
+      }
+    }
+
+    unlockBtn.addEventListener('click', unlockLetter);
+
+    // Photo Gallery Data
+    const photos = [
+      { src: 'WhatsApp Image 2025-10-25 at 23.43.11.jpeg' },
+      { src: 'WhatsApp Image 2025-10-25 at 23.43.12 (2).jpeg' },
+      { src: 'WhatsApp Image 2025-10-25 at 23.43.12 (3).jpeg' },
+      { src: 'WhatsApp Image 2025-10-25 at 23.43.12 (4).jpeg' },
+      { src: 'WhatsApp Image 2025-10-25 at 23.43.12 (5).jpeg' },
+      { src: 'WhatsApp Image 2025-10-25 at 23.43.12 (6).jpeg' },
+      { src: 'WhatsApp Image 2025-10-25 at 23.43.13 (1).jpeg' },
+      { src: 'WhatsApp Image 2025-10-25 at 23.43.13 (2).jpeg' },
+      { src: 'WhatsApp Image 2025-10-25 at 23.43.13.jpeg' }
+    ];
+
+    let currentPhotoIndex = 0;
+    let slideshowInterval;
+
+    // Automatic Slideshow Functions
+    const currentSlide = document.getElementById('currentSlide');
+    const slideshowProgress = document.getElementById('slideshowProgress');
+    const slidePrev = document.getElementById('slidePrev');
+    const slideNext = document.getElementById('slideNext');
+
+    function initSlideshow() {
+      // Create progress dots
+      slideshowProgress.innerHTML = '';
+      photos.forEach((_, index) => {
+        const dot = document.createElement('div');
+        dot.className = 'progress-dot' + (index === 0 ? ' active' : '');
+        dot.addEventListener('click', () => {
+          currentPhotoIndex = index;
+          updateSlide(index);
+          resetSlideshow();
+        });
+        slideshowProgress.appendChild(dot);
+      });
+      
+      // Show first image
+      updateSlide(0);
+      
+      // Add navigation event listeners
+      slidePrev.addEventListener('click', () => {
+        currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+        updateSlide(currentPhotoIndex);
+        resetSlideshow();
+      });
+      
+      slideNext.addEventListener('click', () => {
+        currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+        updateSlide(currentPhotoIndex);
+        resetSlideshow();
+      });
+    }
+
+    function updateSlide(index) {
+      const photo = photos[index];
+      currentSlide.src = photo.src;
+      
+      // Update progress dots
+      document.querySelectorAll('.progress-dot').forEach((dot, i) => {
+        dot.classList.toggle('active', i === index);
+      });
+      
+      // Reset animation
+      currentSlide.style.animation = 'none';
+      setTimeout(() => {
+        currentSlide.style.animation = 'fadeInSlide 1s ease-in-out forwards';
+      }, 10);
+    }
+
+    function resetSlideshow() {
+      clearInterval(slideshowInterval);
+      startSlideshow();
+    }
+
+    function startSlideshow() {
+      slideshowInterval = setInterval(() => {
+        currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+        updateSlide(currentPhotoIndex);
+      }, 4000);
+    }
+
+    // Letter functionality
+    const letterText = document.getElementById('letterText');
+    const downloadTxtBtn = document.getElementById('downloadTxtBtn');
+    const copyBtn = document.getElementById('copyBtn');
+    const musicBtn = document.getElementById('musicBtn');
+    const bgAudio = document.getElementById('bgAudio');
+    const toast = document.getElementById('toast');
+
+    // Download letter as text file
+    downloadTxtBtn.addEventListener('click', () => {
+      try {
+        const text = letterText.textContent.trim();
+        const blob = new Blob([text], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'Letter_For_Rajjo.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        showToast('Letter downloaded! 📥');
+      } catch (e) {
+        console.error('Download failed:', e);
+        showToast('Download failed. Please try again.');
+      }
+    });
+
+    // Copy letter
+    copyBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(letterText.textContent.trim());
+        showToast('Copied to clipboard! 📋');
+      } catch (e) {
+        showToast('Copy failed - please select and copy manually');
+      }
+    });
+
+    // Music control
+    musicBtn.addEventListener('click', () => {
+      if (!bgAudio.src) {
+        showToast('Add your music file to play! 🎵');
+        return;
+      }
+
+      if (bgAudio.paused) {
+        bgAudio.play();
+        musicBtn.textContent = '🔊';
+      } else {
+        bgAudio.pause();
+        musicBtn.textContent = '🔇';
+      }
+    });
+
+    bgAudio.addEventListener('ended', () => {
+      musicBtn.textContent = '🔇';
+    });
+
+    // Toast notification
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    // Fortune Cookie Feature
+    const fortuneBtn = document.getElementById('fortuneBtn');
+    const fortuneModal = document.getElementById('fortuneModal');
+    const fortuneContainer = document.getElementById('fortuneContainer');
+    const fortuneYes = document.getElementById('fortuneYes');
+    const fortuneNo = document.getElementById('fortuneNo');
+    const fortuneClose = document.getElementById('fortuneClose');
+    const heartsBurst = document.getElementById('heartsBurst');
+    const forgivenessMessage = document.getElementById('forgivenessMessage');
+
+    fortuneBtn.addEventListener('click', () => {
+      fortuneModal.classList.add('active');
+      resetFortuneModal();
+    });
+
+    function resetFortuneModal() {
+      forgivenessMessage.classList.remove('show');
+      fortuneYes.style.display = 'block';
+      fortuneNo.style.display = 'block';
+      fortuneNo.style.position = 'relative';
+      fortuneNo.style.left = '0';
+      fortuneNo.style.top = '0';
+    }
+
+    fortuneYes.addEventListener('click', () => {
+      fortuneYes.style.display = 'none';
+      fortuneNo.style.display = 'none';
+      forgivenessMessage.classList.add('show');
+      createHeartsBurst();
+    });
+
+    let noButtonTimeout;
+    fortuneNo.addEventListener('mouseenter', () => {
+      moveNoButton();
+    });
+
+    fortuneNo.addEventListener('click', (e) => {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    function moveNoButton() {
+      const container = fortuneContainer;
+      const containerRect = container.getBoundingClientRect();
+      const buttonRect = fortuneNo.getBoundingClientRect();
+      
+      // Calculate available space
+      const maxX = containerRect.width - buttonRect.width - 80;
+      const maxY = containerRect.height - buttonRect.height - 80;
+      
+      // Random position
+      const randomX = Math.random() * maxX - maxX/2;
+      const randomY = Math.random() * maxY - maxY/2;
+      
+      fortuneNo.style.position = 'absolute';
+      fortuneNo.style.left = randomX + 'px';
+      fortuneNo.style.top = randomY + 'px';
+      
+      // Random rotation for fun
+      fortuneNo.style.transform = `rotate(${Math.random() * 360}deg)`;
+    }
+
+    fortuneClose.addEventListener('click', () => {
+      fortuneModal.classList.remove('active');
+    });
+
+    fortuneModal.addEventListener('click', (e) => {
+      if (e.target === fortuneModal) {
+        fortuneModal.classList.remove('active');
+      }
+    });
+
+    function createHeartsBurst() {
+      heartsBurst.innerHTML = '';
+      const hearts = ['❤️', '💕', '💖', '💗', '💝', '💞'];
+      
+      for (let i = 0; i < 20; i++) {
+        const heart = document.createElement('div');
+        heart.className = 'heart-particle';
+        heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animationDelay = (Math.random() * 0.5) + 's';
+        heartsBurst.appendChild(heart);
+      }
+    }
+
+    // Focus first input on load
+    digit1.focus();
+  </script>
+</body>
+</html>
